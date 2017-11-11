@@ -5,8 +5,10 @@ public class Nodo {
 	private int h;
 	private int x;
 	private int y;
+	private float cost;
+
 	
-	private Nodo parent;
+	private Nodo padre;
 	
 	public Nodo(int x, int y) {
 		this.x = x;
@@ -33,13 +35,21 @@ public class Nodo {
 		this.h = h;
 	}
 	
+	public float getCost() {
+		return cost;
+	}
+
+	public void setCost(float cost) {
+		this.cost = cost;
+	}
+	
 
 	public Nodo getParent() {
-		return this.parent;
+		return this.padre;
 	}
 
 	public void setParent(Nodo parent) {
-		this.parent = parent;
+		this.padre = parent;
 	}
 
 	public int getX() {

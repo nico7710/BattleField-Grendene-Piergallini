@@ -19,7 +19,9 @@ public class Astar {
 	public Astar() {
 		
 		nodos = new ArrayList<>();
-
+		nodosCerrados = new ArrayList<Nodo>();
+		nodosAbiertos = new ArrayList<Nodo>();
+		
 		mapWidth = ConfigurationManager.getInstance().getMapWidth();
 		mapHeight = ConfigurationManager.getInstance().getMapHeight();
 			
@@ -32,25 +34,21 @@ public class Astar {
 				cell = bf.getFieldCell(x, y);
 				
 				if(cell.getFieldCellType() == FieldCellType.NORMAL) { //pregunto si se puede caminar
-					nodos.add(new Nodo(cell.getX(), cell.getY()));
+					Nodo newNodo = new Nodo(cell.getX(), cell.getY());
+					newNodo.setCost(cell.getCost());
+					nodos.add(newNodo);
 				}
 			}
 		}
 		
 	}
 
-	public ArrayList<Nodo> buscarRuta(FieldCell origen, FieldCell destino) {
+	public ArrayList<Nodo> buscarRuta(FieldCell origen, FieldCell destino, FieldCell hunter) {
 		
+		esquivarHunter(hunter);
 		
-		nodosCerrados = new ArrayList<Nodo>();
-		nodosAbiertos = new ArrayList<Nodo>();
-		
-		Nodo nodoorigen = new Nodo(origen.getX(), origen.getY());
-		Nodo nododestino = new Nodo(destino.getX(), destino.getY());
-		
-		this.origen = nodos.get(nodos.indexOf(nodoorigen));
-		this.destino = nodos.get(nodos.indexOf(nododestino));
-
+		this.origen = nodos.get(nodos.indexOf(new Nodo(origen.getX(), origen.getY())));
+		this.destino = nodos.get(nodos.indexOf(new Nodo(destino.getX(), destino.getY())));
 		
 		Nodo nodoActual = this.origen;
 		
@@ -61,6 +59,7 @@ public class Astar {
 
 		return obtenerRuta();
 	}
+	
 
 	private ArrayList<Nodo> obtenerRuta() {
 		ArrayList<Nodo> ruta = new ArrayList<Nodo>();
@@ -97,9 +96,9 @@ public class Astar {
 			//calcula distancia  de origen al  nodo 'n' 
 			int g = nodo.getG();
 			if (nodo.getX() == n.getX() || nodo.getY() == n.getY())
-				g += 10;
+				g += 1*nodo.getCost(); //usemos el costo
 			else
-				g += 14; //para redondear
+				g += 1.41*nodo.getCost(); //para redondear
 
 			if (!nodosAbiertos.contains(n)) {
 
@@ -167,42 +166,23 @@ public class Astar {
 		return nodosAdyacentes;
 	}
 
-	/*public void marcarCamino(ArrayList<Nodo> ruta) {
-		for(Nodo nodo : ruta)
-			mapa[nodo.getX()][nodo.getY()] = 2;
-		
-	}
 	
-	public void imprimirMapa() {
+	public void esquivarHunter(FieldCell hunter) {
 		
+		int rango = 5;
+		Nodo nodo = null;
+		
+		for (int x = 0; x < rango; x++){ 
+			for (int y = 0; y < rango; y++){
 				
-		for (int x = 0; x < mapWidth; x++) {
-			for (int y = 0; y < mapHeight; y++) {
-				
-				FieldCell cell = bf.getFieldCell(x, y);
-				
-				switch (cell.getFieldCellType()) {
-				case NORMAL:
-					if(origen.getX()==x && origen.getY()==y)
-						System.out.print(" A ");
-					else
-						System.out.print(" 0 ");
-					break;
-					
-				case BLOCKED:
-					System.out.print(" 1 ");
-					break;
-					
-				case 2:
-					if(destino.getX()==x && destino.getY()==y)
-						System.out.print(" B ");
-					else
-						System.out.print(" x ");								
-					break;
+				try {
+					nodo = nodos.get(nodos.indexOf(new Nodo(hunter.getX()+x, hunter.getY()+y)));
+				} catch (Exception e) {
 				}
 				
-			System.out.println();
+			}
 		}
-	}*/
+	
+	}
 
 }

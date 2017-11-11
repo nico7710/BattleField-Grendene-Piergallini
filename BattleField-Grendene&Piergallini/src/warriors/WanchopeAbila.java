@@ -12,98 +12,65 @@ import ia.battle.core.actions.Attack;
 import ia.battle.core.actions.Move;
 import ia.battle.core.actions.Skip;
 import ia.exceptions.RuleException;
+import manager.Mapa;
 
 public class WanchopeAbila extends Warrior  {
 	
 	private Astar aStar;
 	private ArrayList<FieldCell> ruta;
-
+	private Mapa mapa;
+	private BattleField bf;
+	
 	public WanchopeAbila(String name, int health, int defense, int strength, int speed, int range)
 			throws RuleException {
 		super(name, health, defense, strength, speed, range);
 
 		this.aStar = new Astar();
-		this.ruta = new ArrayList<>();		
+		this.ruta = new ArrayList<>();	
 		
+		mapa = Mapa.getInstance();
+		bf = BattleField.getInstance();	
+
 	}
 
 	@Override
 	public Action playTurn(long tick, int actionNumber) {
-
-		//Accion por default saltear
-		Action action = new Skip();
-		
-		BattleField bf = BattleField.getInstance();	
-		
-		//enemigo
-		WarriorData enemyData = bf.getEnemyData();
-		FieldCell enemyPosition = enemyData.getFieldCell();
-		
-		//hunter   
-		WarriorData hunterData = bf.getHunterData();
-		FieldCell hunterPosition = hunterData.getFieldCell(); //por ahora me chupa un huevo el hunter	
-		
-		
-		// mi posicion
-		FieldCell myPosition = this.getPosition();		
 		
 
+		Action action = null;
 		
-		//ataco si esta dentro del rango
-		if(enemyData.getInRange()) {
-			action = new Attack(enemyData.getFieldCell());
-			return action;
-		}
-		
-		
-		//obtengo paquetes
-		List<FieldCell> boxes = bf.getSpecialItems();
-		List<FieldCell> myPrize = new ArrayList<>();
-		
-		
-			for(FieldCell box:boxes){
-				int distanceToBox = (int) Math.ceil(bf.calculateDistance(myPosition, box));
-				if(distanceToBox < getRange()){
-					myPrize.add(box);
-				}
-			}
+			//enemigo
+			WarriorData enemyData = bf.getEnemyData();
+			FieldCell enemyPosition = enemyData.getFieldCell();
 			
-			ruta.clear();
-				
-			//voy por el paquete si estoy cerca y sino voy por el enemigo
-			if(myPrize.size() > 0) {
-				ArrayList<FieldCell> partials = new ArrayList<>();
-				FieldCell visitedCell = null;
-				for(FieldCell prize:myPrize){
-					if(visitedCell == null){
-						ruta = transformToCell(aStar.buscarRuta(myPosition, prize));
-					}else{
-						ruta = transformToCell(aStar.buscarRuta(visitedCell, prize));
-					}
+			//hunter   
+			WarriorData hunterData = bf.getHunterData();
+			FieldCell hunterPosition = hunterData.getFieldCell(); 
+			
+			// mi posicion
+			FieldCell myPosition = this.getPosition();		
+			
+
+			
+			//ataco si esta dentro del rango
+			if(enemyData.getInRange()) {
+				action = new Attack(enemyData.getFieldCell());
+			}
+
+						
 					
-					visitedCell = prize;
-					partials.addAll(ruta);
-				}
+			
+			//si veo algun paquete voy por el
+			if(bf.getSpecialItems().size()>0){
+				//for (FieldCell fieldCell : bf.getSpecialItems())
+					//mapa.addCeldaPaquete(fieldCell);
 				
-				ruta = partials;
-				
-			}else{
-				// no hay paquete por lo tanto voy por el enemigo
-				
-				ruta = transformToCell(aStar.buscarRuta(myPosition, enemyPosition));
+				action = new BuscarCaja(myPosition);
 
 			}
-				
+
 		
-		//moverse ya sea a un enemigo o a un paquete
-		action = new Move() {
-			
-			@Override
-			public ArrayList<FieldCell> move() {
-				return ruta;
-			}
-		};
-		
+	
 		return action;
 	}
 
