@@ -17,7 +17,6 @@ public class Astar {
 	private BattleField bf;
 	
 	public Astar() {
-		
 		nodos = new ArrayList<>();
 		nodosCerrados = new ArrayList<Nodo>();
 		nodosAbiertos = new ArrayList<Nodo>();
@@ -39,12 +38,14 @@ public class Astar {
 					nodos.add(newNodo);
 				}
 			}
-		}
-		
+		}	
 	}
 
 	public ArrayList<Nodo> buscarRuta(FieldCell origen, FieldCell destino, FieldCell hunter) {
 		
+		nodosCerrados.clear();
+		nodosAbiertos.clear();
+
 		esquivarHunter(hunter);
 		
 		this.origen = nodos.get(nodos.indexOf(new Nodo(origen.getX(), origen.getY())));
@@ -85,6 +86,8 @@ public class Astar {
 	
 		
 		for (Nodo n : adj) {
+			
+			//System.out.println("costo"+n.getCost());
 
 			if (nodosCerrados.contains(n))
 				continue;
@@ -169,7 +172,7 @@ public class Astar {
 	
 	public void esquivarHunter(FieldCell hunter) {
 		
-		int rango = 5;
+		/*int rango = 5;
 		Nodo nodo = null;
 		
 		for (int x = 0; x < rango; x++){ 
@@ -181,7 +184,7 @@ public class Astar {
 				}
 				
 			}
-		}
+		}*/
 	
 	}
 

@@ -1,7 +1,5 @@
 package warriors;
 import java.util.ArrayList;
-import java.util.List;
-import Astar.Astar;
 import Astar.Nodo;
 import ia.battle.core.BattleField;
 import ia.battle.core.FieldCell;
@@ -9,68 +7,45 @@ import ia.battle.core.Warrior;
 import ia.battle.core.WarriorData;
 import ia.battle.core.actions.Action;
 import ia.battle.core.actions.Attack;
-import ia.battle.core.actions.Move;
 import ia.battle.core.actions.Skip;
 import ia.exceptions.RuleException;
-import manager.Mapa;
 
 public class WanchopeAbila extends Warrior  {
 	
-	private Astar aStar;
-	private ArrayList<FieldCell> ruta;
-	private Mapa mapa;
 	private BattleField bf;
 	
 	public WanchopeAbila(String name, int health, int defense, int strength, int speed, int range)
 			throws RuleException {
 		super(name, health, defense, strength, speed, range);
 
-		this.aStar = new Astar();
-		this.ruta = new ArrayList<>();	
-		
-		mapa = Mapa.getInstance();
-		bf = BattleField.getInstance();	
-
 	}
 
 	@Override
 	public Action playTurn(long tick, int actionNumber) {
 		
+		//me actualizo los datos de la partida
+		bf = BattleField.getInstance();	
 
-		Action action = null;
+		//por defecto
+		Action action = new Skip();
 		
-			//enemigo
-			WarriorData enemyData = bf.getEnemyData();
-			FieldCell enemyPosition = enemyData.getFieldCell();
-			
-			//hunter   
-			WarriorData hunterData = bf.getHunterData();
-			FieldCell hunterPosition = hunterData.getFieldCell(); 
-			
-			// mi posicion
-			FieldCell myPosition = this.getPosition();		
-			
-
-			
-			//ataco si esta dentro del rango
-			if(enemyData.getInRange()) {
-				action = new Attack(enemyData.getFieldCell());
-			}
-
-						
-					
-			
-			//si veo algun paquete voy por el
-			if(bf.getSpecialItems().size()>0){
-				//for (FieldCell fieldCell : bf.getSpecialItems())
-					//mapa.addCeldaPaquete(fieldCell);
-				
-				action = new BuscarCaja(myPosition);
-
-			}
-
+		// mi posicion
+		FieldCell myPosition = this.getPosition();		
 		
-	
+		//ataco si esta dentro del rango
+		WarriorData enemyData = bf.getEnemyData();
+		if(enemyData.getInRange()) {
+			action = new Attack(enemyData.getFieldCell());
+			System.out.println("Veo a mi enemigo, ataco!\n");
+		}
+		
+		if(bf.getSpecialItems().size()>0){
+			System.out.println("Veo una caja y voy por ella\n");
+			action = new BuscarCaja(myPosition);
+		}else{
+			System.out.println("No veo cajas, deambulo un rato\n");						
+			action = new Deambular(myPosition);
+		}
 		return action;
 	}
 
