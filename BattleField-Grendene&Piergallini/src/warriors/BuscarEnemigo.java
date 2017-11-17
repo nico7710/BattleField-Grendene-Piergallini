@@ -23,7 +23,6 @@ public class BuscarEnemigo extends Move {
 		
 		aStar = new Astar();
 		ruta = transformToCell(aStar.buscarRuta(myPosition, enemyCell, hunterPosition));
-		System.out.println("calculo ruta");
 		
 	}
 

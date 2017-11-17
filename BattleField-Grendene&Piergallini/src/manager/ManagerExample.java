@@ -8,7 +8,6 @@ import ia.exceptions.RuleException;
 public class ManagerExample extends WarriorManager {
 	
 	private static String name = "Piergallini&Grendene";
-	//int health; defense, strength, speed, range = 10;
 	
 	int maxPointsPerWarrior, maxRangeForWarrior, maxWarriorPerBattle;
 	
@@ -34,8 +33,9 @@ public class ManagerExample extends WarriorManager {
 	@Override
 	public Warrior getNextWarrior() throws RuleException {
 				
-		return WarriorFactory.crearWanchopeAbila(20, 20, 20, 20, 20);
-		
+		return WarriorFactory.crearWanchopeAbila();
+		//return WarriorFactory.crearKamikaze();
+
 	}
 	
 }

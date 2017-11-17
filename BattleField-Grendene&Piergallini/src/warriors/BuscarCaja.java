@@ -26,6 +26,8 @@ public class BuscarCaja extends ia.battle.core.actions.Move {
 		this.myPosition = myPosition;
 	
 		this.cajas = DataManager.getInstance().getSpecialItems();
+		
+		System.out.println("Paquetes que vi: "+DataManager.getInstance().getSpecialItems().size());
 			
 		WarriorData hunterData = bf.getHunterData();
 		hunterPosition = hunterData.getFieldCell(); 
@@ -39,22 +41,17 @@ public class BuscarCaja extends ia.battle.core.actions.Move {
 	
 	
 	public FieldCell buscarElMasCerca() {
-		
-
-		ArrayList<Nodo> camino = aStar.buscarRuta(myPosition, cajas.get(0), hunterPosition);
-		Nodo ultimoNodo = camino.get(camino.size()-1);
-		int distancia = ultimoNodo.getG();
-		FieldCell masCerca = bf.getFieldCell(ultimoNodo.getX(), ultimoNodo.getY());
+			
+		int distancia = aStar.buscarDistancia(myPosition, cajas.get(0), hunterPosition);
+		FieldCell masCerca = bf.getFieldCell(cajas.get(0).getX(), cajas.get(0).getY());
 		
 		for (int i = 1; i < cajas.size(); i++) {
-			camino = aStar.buscarRuta(myPosition, cajas.get(i), hunterPosition);
-			ultimoNodo = camino.get(camino.size()-1);
-			if(ultimoNodo.getG()<distancia)
-				masCerca = bf.getFieldCell(ultimoNodo.getX(), ultimoNodo.getY());
+			int distTemp = aStar.buscarDistancia(myPosition, cajas.get(i), hunterPosition);
+			if(distTemp<distancia)
+				masCerca = bf.getFieldCell(cajas.get(i).getX(), cajas.get(i).getY());
+				distancia=distTemp;
 		}
 
-		
-		
 		return masCerca;
 	}
 	

@@ -50,20 +50,23 @@ public class WanchopeAbila extends Warrior  {
 		WarriorData enemyData = bf.getEnemyData();
 		
 
-		
-		if(enemyData.getInRange()) {
-			action = new Attack(enemyData.getFieldCell());
-			System.out.println("Veo a mi enemigo, ataco!\n");
-		}else{
-			if(DataManager.getInstance().getSpecialItems().size()>0){
-				System.out.println("Veo una caja y voy por ella\n");
-				action = new BuscarCaja(myPosition);
+		try{
+			if(enemyData.getInRange()) {
+				action = new Attack(enemyData.getFieldCell());
+				System.out.println("Veo a mi enemigo, ataco!\n");
 			}else{
-				System.out.println("No veo cajas, deambulo un rato\n");						
-				action = new Deambular(myPosition);
-			}			
+				if(DataManager.getInstance().getSpecialItems().size()>0){
+					System.out.println("Veo una caja y voy por ella\n");
+					action = new BuscarCaja(myPosition);
+				}else{
+					System.out.println("No veo cajas, deambulo un rato\n");						
+					action = new Deambular(myPosition);
+				}			
+			}
+		}catch(Exception e){
+			action = new Skip();
+			System.out.println(e.getMessage()+"Skip");
 		}
-		
 
 		return action;
 	}
@@ -71,8 +74,7 @@ public class WanchopeAbila extends Warrior  {
 	
 	@Override
 	public void wasAttacked(int damage, FieldCell source) {
-		// TODO Auto-generated method stub
-		
+		System.out.println("fui atacado");		
 	}
 
 	@Override

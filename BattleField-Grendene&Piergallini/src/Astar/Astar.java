@@ -20,7 +20,8 @@ public class Astar {
 	public Astar() {
 	
 	}
-
+	
+	
 	public ArrayList<Nodo> buscarRuta(FieldCell origen, FieldCell destino, FieldCell hunter) {
 		
 		nodos = new ArrayList<>();
@@ -200,5 +201,13 @@ public class Astar {
 		return Math.sqrt(distance);
 	}
 	
+	public int buscarDistancia(FieldCell origen, FieldCell destino, FieldCell hunter) {
+		ArrayList<Nodo> ruta = buscarRuta(origen, destino, hunter);
+		if(ruta!=null){
+			return ruta.get(ruta.size()-1).getG();
+		}else{
+			return 9999;
+		}
+	}
 
 }
