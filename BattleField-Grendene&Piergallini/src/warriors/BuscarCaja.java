@@ -33,6 +33,7 @@ public class BuscarCaja extends ia.battle.core.actions.Move {
 		hunterPosition = hunterData.getFieldCell(); 
 		
 		FieldCell cajamasCerca = buscarElMasCerca();
+		System.out.println(cajamasCerca.toString());
 
 		ruta = transformToCell(aStar.buscarRuta(myPosition, cajamasCerca, hunterPosition));
 

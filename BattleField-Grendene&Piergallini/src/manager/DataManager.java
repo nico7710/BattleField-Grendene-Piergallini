@@ -27,15 +27,14 @@ public class DataManager {
 		return specialItems;
 	}
 
-	public void addSpecialItems(FieldCell specialItem) {
-		if(!findspecialItem(specialItem))
-			this.specialItems.add(specialItem);
+	public void addSpecialItems(ArrayList<FieldCell> specialItems) {
+		for (FieldCell fieldCell : specialItems)
+			if(!findspecialItem(fieldCell))
+				this.specialItems.add(fieldCell);		
 	}
 	
 	public void deleteSpecialItems(FieldCell specialItem) {
-		
 		this.specialItems.remove(specialItem);
-	
 	}
 	
 	private Boolean findspecialItem(FieldCell specialItem){

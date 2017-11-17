@@ -30,15 +30,8 @@ public class WanchopeAbila extends Warrior  {
 		
 		System.out.println("Paquetes que vi: "+DataManager.getInstance().getSpecialItems().size());
 		
-		if(bf.getSpecialItems().size()>0)
-		for (FieldCell specialItem : bf.getSpecialItems()) {
-			DataManager.getInstance().addSpecialItems(specialItem);
-		}
-		
-		DataManager.getInstance().deleteSpecialItems(myPosition);
-
-
-		
+		DataManager.getInstance().addSpecialItems(bf.getSpecialItems());
+				
 		//me actualizo los datos de la partida
 
 		//por defecto
@@ -67,8 +60,10 @@ public class WanchopeAbila extends Warrior  {
 			action = new Skip();
 			System.out.println(e.getMessage()+"Skip");
 		}
-
+		
+		DataManager.getInstance().deleteSpecialItems(myPosition);
 		return action;
+
 	}
 
 	
@@ -89,17 +84,5 @@ public class WanchopeAbila extends Warrior  {
 		
 	}
 	
-	
-	//metodo que transformo un array de nodos a un array de celdas
-	public static ArrayList<FieldCell> transformToCell(ArrayList<Nodo> source){
-		ArrayList<FieldCell> result = new ArrayList<>();
-		BattleField bf = BattleField.getInstance();
-		
-		for(Nodo n:source){
-			result.add(bf.getFieldCell(n.getX(), n.getY()));
-		}
-		
-		return result;
-	}
 
 }
