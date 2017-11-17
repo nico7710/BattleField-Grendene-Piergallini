@@ -1,11 +1,9 @@
 package warriors;
 import ia.battle.core.BattleField;
-import ia.battle.core.ConfigurationManager;
 import ia.battle.core.FieldCell;
 import ia.battle.core.Warrior;
 import ia.battle.core.WarriorData;
 import ia.battle.core.actions.Action;
-import ia.battle.core.actions.Attack;
 import ia.battle.core.actions.Skip;
 import ia.battle.core.actions.Suicide;
 import ia.exceptions.RuleException;

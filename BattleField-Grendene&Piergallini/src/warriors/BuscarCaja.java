@@ -1,7 +1,6 @@
 package warriors;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import Astar.Astar;
 import Astar.Nodo;
@@ -26,14 +25,11 @@ public class BuscarCaja extends ia.battle.core.actions.Move {
 		this.myPosition = myPosition;
 	
 		this.cajas = DataManager.getInstance().getSpecialItems();
-		
-		System.out.println("Paquetes que vi: "+DataManager.getInstance().getSpecialItems().size());
-			
+					
 		WarriorData hunterData = bf.getHunterData();
 		hunterPosition = hunterData.getFieldCell(); 
 		
 		FieldCell cajamasCerca = buscarElMasCerca();
-		System.out.println(cajamasCerca.toString());
 
 		ruta = transformToCell(aStar.buscarRuta(myPosition, cajamasCerca, hunterPosition));
 

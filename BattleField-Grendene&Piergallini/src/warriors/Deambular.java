@@ -22,6 +22,7 @@ public class Deambular extends Move {
 	private BattleField bf;
 
 	public Deambular(FieldCell myPosition) {
+		
 		mapWidth = ConfigurationManager.getInstance().getMapWidth();
 		mapHeight = ConfigurationManager.getInstance().getMapHeight();
 		
@@ -30,15 +31,23 @@ public class Deambular extends Move {
 		hunterPosition = hunterData.getFieldCell();
 		
 		FieldCell randomCell;
+		ArrayList<Nodo> a = null;
+		aStar = new Astar();
 		
 		do{
 			Random random = new Random();
 			randomCell = bf.getFieldCell(random.nextInt(mapWidth), random.nextInt(mapHeight));
-		}while(randomCell.getFieldCellType()==FieldCellType.BLOCKED);
+			
+			try {
+				a = aStar.buscarRuta(myPosition, randomCell, hunterPosition);
+			} catch (Exception e) {
+				//System.out.println("No Puedo llegar a la celda que se genero al azar");
+			}
+		}while(randomCell.getFieldCellType()==FieldCellType.BLOCKED && a==null);
 		
+		
+		ruta = transformToCell(a);
 	
-		aStar = new Astar();
-		ruta = transformToCell(aStar.buscarRuta(myPosition, randomCell, hunterPosition));
 		
 	}
 

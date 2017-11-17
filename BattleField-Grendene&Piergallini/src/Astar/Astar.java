@@ -174,17 +174,18 @@ public class Astar {
 	
 	public void esquivarHunter(FieldCell hunter, FieldCell origen) {
 		
-		double distance = calcularDistancia(origen, hunter);
-		
+		float distance = calcularDistancia(origen, hunter);
+
 		int rango = DataManager.getInstance().getRangoHunter();
 		Nodo nodo = null;
 		FieldCell fieldcell;
 		
-		for (int x = 0; x < rango; x++){ 
-			for (int y = 0; y < rango; y++){
+		for (int x = 0; x <= rango; x++){ 
+			for (int y = 0; y <= rango; y++){
 				
-				if(hunter.getX()+x<mapWidth && hunter.getY()+y<mapHeight){
+				if(((hunter.getX()+x)<mapWidth) && ((hunter.getY()+y)<mapHeight)){
 					fieldcell = BattleField.getInstance().getFieldCell(hunter.getX()+x, hunter.getY()+y);
+
 					if(calcularDistancia(fieldcell, hunter)<distance && fieldcell.getFieldCellType()==FieldCellType.NORMAL){
 						nodo = nodos.get(nodos.indexOf(new Nodo(fieldcell.getX(), fieldcell.getY())));
 						nodos.remove(nodo);
@@ -196,9 +197,9 @@ public class Astar {
 	
 	}
 	
-	private double calcularDistancia(FieldCell origen, FieldCell destino){
-		double distance = Math.pow(origen.getX() - destino.getX(), 2) + Math.pow(origen.getY() - destino.getY(), 2);
-		return Math.sqrt(distance);
+	private float calcularDistancia(FieldCell origen, FieldCell destino){
+		float distance = (float) (Math.pow(origen.getX() - destino.getX(), 2) + Math.pow(origen.getY() - destino.getY(), 2));
+		return (float) Math.sqrt(distance);
 	}
 	
 	public int buscarDistancia(FieldCell origen, FieldCell destino, FieldCell hunter) {

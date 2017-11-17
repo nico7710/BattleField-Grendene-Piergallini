@@ -1,6 +1,4 @@
 package warriors;
-import java.util.ArrayList;
-import Astar.Nodo;
 import ia.battle.core.BattleField;
 import ia.battle.core.FieldCell;
 import ia.battle.core.Warrior;
@@ -25,42 +23,36 @@ public class WanchopeAbila extends Warrior  {
 	
 		bf = BattleField.getInstance();	
 		
-		// mi posicion
 		FieldCell myPosition = this.getPosition();	
-		
-		System.out.println("Paquetes que vi: "+DataManager.getInstance().getSpecialItems().size());
-		
+				
+		//dejo registro de todas las cajas que veo
 		DataManager.getInstance().addSpecialItems(bf.getSpecialItems());
 				
-		//me actualizo los datos de la partida
-
-		//por defecto
 		Action action = new Skip();
-		
-	
-		
-		//ataco si esta dentro del rango
 		WarriorData enemyData = bf.getEnemyData();
-		
 
 		try{
 			if(enemyData.getInRange()) {
-				action = new Attack(enemyData.getFieldCell());
 				System.out.println("Veo a mi enemigo, ataco!\n");
+				action = new Attack(enemyData.getFieldCell());
 			}else{
 				if(DataManager.getInstance().getSpecialItems().size()>0){
-					System.out.println("Veo una caja y voy por ella\n");
+					System.out.println("busco caja\n");						
 					action = new BuscarCaja(myPosition);
 				}else{
-					System.out.println("No veo cajas, deambulo un rato\n");						
+					System.out.println("no tengo cajas, deambulo\n");						
 					action = new Deambular(myPosition);
 				}			
 			}
 		}catch(Exception e){
-			action = new Skip();
-			System.out.println(e.getMessage()+"Skip");
+			try {
+				System.out.println("deambulo porque las cajas estan cerca del hunter\n");						
+				action = new Deambular(myPosition);
+			} catch (Exception e2) {
+				action = new Skip();
+			}
 		}
-		
+	
 		DataManager.getInstance().deleteSpecialItems(myPosition);
 		return action;
 
@@ -69,7 +61,7 @@ public class WanchopeAbila extends Warrior  {
 	
 	@Override
 	public void wasAttacked(int damage, FieldCell source) {
-		System.out.println("fui atacado");		
+		// System.out.println("fui atacado");		
 	}
 
 	@Override
