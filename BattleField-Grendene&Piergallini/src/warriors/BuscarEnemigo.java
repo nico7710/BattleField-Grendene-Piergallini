@@ -5,6 +5,7 @@ import Astar.Astar;
 import Astar.Nodo;
 import ia.battle.core.BattleField;
 import ia.battle.core.FieldCell;
+import ia.battle.core.WarriorData;
 import ia.battle.core.actions.Move;
 
 public class BuscarEnemigo extends Move {
@@ -13,13 +14,16 @@ public class BuscarEnemigo extends Move {
 	private ArrayList<FieldCell> ruta;
 	
 	
-	public BuscarEnemigo(FieldCell myPosition, FieldCell hunter) {
+	public BuscarEnemigo(FieldCell myPosition) {
+		
+		WarriorData hunterData = BattleField.getInstance().getHunterData();
+		FieldCell hunterPosition = hunterData.getFieldCell(); 
 
 		FieldCell enemyCell = BattleField.getInstance().getEnemyData().getFieldCell();
 		
 		aStar = new Astar();
-		ruta = transformToCell(aStar.buscarRuta(myPosition, enemyCell, hunter));
-		
+		ruta = transformToCell(aStar.buscarRuta(myPosition, enemyCell, hunterPosition));
+		System.out.println("calculo ruta");
 		
 	}
 

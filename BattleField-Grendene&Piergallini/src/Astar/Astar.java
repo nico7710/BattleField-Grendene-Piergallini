@@ -6,6 +6,7 @@ import ia.battle.core.BattleField;
 import ia.battle.core.ConfigurationManager;
 import ia.battle.core.FieldCell;
 import ia.battle.core.FieldCellType;
+import manager.DataManager;
 
 public class Astar {
 
@@ -17,6 +18,11 @@ public class Astar {
 	private BattleField bf;
 	
 	public Astar() {
+	
+	}
+
+	public ArrayList<Nodo> buscarRuta(FieldCell origen, FieldCell destino, FieldCell hunter) {
+		
 		nodos = new ArrayList<>();
 		nodosCerrados = new ArrayList<Nodo>();
 		nodosAbiertos = new ArrayList<Nodo>();
@@ -38,15 +44,10 @@ public class Astar {
 					nodos.add(newNodo);
 				}
 			}
-		}	
-	}
+		}
 
-	public ArrayList<Nodo> buscarRuta(FieldCell origen, FieldCell destino, FieldCell hunter) {
+		esquivarHunter(hunter, origen);
 		
-		nodosCerrados.clear();
-		nodosAbiertos.clear();
-
-		esquivarHunter(hunter);
 		
 		this.origen = nodos.get(nodos.indexOf(new Nodo(origen.getX(), origen.getY())));
 		this.destino = nodos.get(nodos.indexOf(new Nodo(destino.getX(), destino.getY())));
@@ -170,22 +171,34 @@ public class Astar {
 	}
 
 	
-	public void esquivarHunter(FieldCell hunter) {
+	public void esquivarHunter(FieldCell hunter, FieldCell origen) {
 		
-		/*int rango = 5;
+		double distance = calcularDistancia(origen, hunter);
+		
+		int rango = DataManager.getInstance().getRangoHunter();
 		Nodo nodo = null;
+		FieldCell fieldcell;
 		
 		for (int x = 0; x < rango; x++){ 
 			for (int y = 0; y < rango; y++){
 				
-				try {
-					nodo = nodos.get(nodos.indexOf(new Nodo(hunter.getX()+x, hunter.getY()+y)));
-				} catch (Exception e) {
+				if(hunter.getX()+x<mapWidth && hunter.getY()+y<mapHeight){
+					fieldcell = BattleField.getInstance().getFieldCell(hunter.getX()+x, hunter.getY()+y);
+					if(calcularDistancia(fieldcell, hunter)<distance && fieldcell.getFieldCellType()==FieldCellType.NORMAL){
+						nodo = nodos.get(nodos.indexOf(new Nodo(fieldcell.getX(), fieldcell.getY())));
+						nodos.remove(nodo);
+					}
 				}
-				
+
 			}
-		}*/
+		}
 	
 	}
+	
+	private double calcularDistancia(FieldCell origen, FieldCell destino){
+		double distance = Math.pow(origen.getX() - destino.getX(), 2) + Math.pow(origen.getY() - destino.getY(), 2);
+		return Math.sqrt(distance);
+	}
+	
 
 }

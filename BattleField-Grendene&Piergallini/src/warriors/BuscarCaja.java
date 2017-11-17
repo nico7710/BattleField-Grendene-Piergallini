@@ -8,6 +8,7 @@ import Astar.Nodo;
 import ia.battle.core.BattleField;
 import ia.battle.core.FieldCell;
 import ia.battle.core.WarriorData;
+import manager.DataManager;
 
 public class BuscarCaja extends ia.battle.core.actions.Move {
 	
@@ -24,7 +25,7 @@ public class BuscarCaja extends ia.battle.core.actions.Move {
 		bf = BattleField.getInstance();	
 		this.myPosition = myPosition;
 	
-		this.cajas = bf.getSpecialItems();	
+		this.cajas = DataManager.getInstance().getSpecialItems();
 			
 		WarriorData hunterData = bf.getHunterData();
 		hunterPosition = hunterData.getFieldCell(); 
